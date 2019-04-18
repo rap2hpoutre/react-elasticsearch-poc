@@ -3,7 +3,7 @@ import { msearch } from "./utils";
 import { getStateContext } from "./StateContextProvider";
 
 export default function() {
-  const [{ query }, dispatch] = getStateContext();
+  const [{ query }] = getStateContext();
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function() {
     }
     fetchData();
   }, [JSON.stringify(query)]);
-  
+
   return (
     <div style={{ border: "green 2px solid" }}>
       <h5>resultats</h5>
