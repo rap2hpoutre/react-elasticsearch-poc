@@ -13,7 +13,17 @@ export default function() {
     <div>
       <Elasticsearch>
         <SearchBox id="main" customQuery={customQuery} />
-        <Facet id="author" fields={["AUTR.keyword"]} />
+        <table>
+          <tr>
+            <td>
+              <Facet id="author" fields={["AUTR.keyword"]} />
+            </td>
+            <td>
+              <Facet id="domn" fields={["DOMN.keyword"]} />
+            </td>
+          </tr>
+        </table>
+
         <Results />
       </Elasticsearch>
     </div>
