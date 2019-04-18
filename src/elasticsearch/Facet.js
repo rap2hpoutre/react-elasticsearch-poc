@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { msearch, aggsFromFields, toTermQueries } from "./utils";
+import { msearch, toTermQueries, queryFrom } from "./utils";
 import { getStateContext } from "./StateContextProvider";
 
 export default function({ fields, id }) {
@@ -8,14 +8,36 @@ export default function({ fields, id }) {
   const [filterValue, setFilterValue] = useState("");
   const [size, setSize] = useState(5);
   const [selectedInputs, setSelectedInputs] = useState([]);
-
   useEffect(() => {
     async function fetchData() {
-      const result = await msearch(aggsFromFields(fields, size, filterValue));
+      function aggsFromFields() {
+        function withoutOwnQueries() {
+          const q = new Map(queries);
+          q.delete(id);
+          return q;
+        }
+        function aggFromField(field) {
+          const t = { field, order: { _count: "desc" }, size };
+          if (filterValue) {
+            t.include = `.*${filterValue}.*`;
+          }
+          return { [field]: { terms: t } };
+        }
+        let result = {};
+        fields.forEach(f => {
+          result = { ...result, ...aggFromField(f) };
+        });
+        return {
+          query: queryFrom(withoutOwnQueries()),
+          size: 0,
+          aggs: result
+        };
+      }
+      const result = await msearch(aggsFromFields());
       setData(result.responses[0].aggregations[fields[0]].buckets);
     }
     fetchData();
-  }, [filterValue, size]);
+  }, [filterValue, size, JSON.stringify(queryFrom(queries))]);
 
   return (
     <div style={{ border: "orange 2px solid", margin: "10px" }}>
