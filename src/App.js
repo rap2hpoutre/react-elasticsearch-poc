@@ -12,7 +12,7 @@ export default function() {
   return (
     <div>
       <Elasticsearch>
-        <SearchBox customQuery={customQuery} />
+        <SearchBox id="main" customQuery={customQuery} />
         <Facet id="author" fields={["AUTR.keyword"]} />
         <Results />
       </Elasticsearch>

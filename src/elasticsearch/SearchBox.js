@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { getStateContext } from "./StateContextProvider";
 
-export default function({ customQuery }) {
-  const [{ query }, dispatch] = getStateContext();
+export default function({ customQuery, id }) {
+  const [{ queries }, dispatch] = getStateContext();
   const [value, setValue] = useState();
   return (
     <div style={{ border: "blue 2px solid", margin: "10px" }}>
@@ -13,12 +13,13 @@ export default function({ customQuery }) {
         onChange={e => {
           setValue(e.target.value);
           dispatch({
-            type: "updateQuery",
-            query: { ...customQuery(e.target.value) }
+            type: "updateQueries",
+            key: id,
+            value: customQuery(e.target.value),
           });
         }}
       />
-      <div>Query: {JSON.stringify(query)}</div>
+      <div>Internal query: {JSON.stringify(queries.get(id))}</div>
     </div>
   );
 }

@@ -35,3 +35,23 @@ export function aggsFromFields(fields, size, filterValue) {
   });
   return { query: { match_all: {} }, size: 0, aggs: result };
 }
+
+export function resultsQuery(queries) {
+  return {
+    bool: {
+      must:
+        queries.size === 0 ? { match_all: {} } : Array.from(queries.values())
+    }
+  };
+}
+
+export function toTermQueries(fields, selectedValues) {
+  const queries = [];
+  console.log(fields, selectedValues)
+  for (let i in fields) {
+    for (let j in selectedValues) {
+      queries.push({ term: { [fields[i]]: selectedValues[j] } });
+    }
+  }
+  return queries;
+}

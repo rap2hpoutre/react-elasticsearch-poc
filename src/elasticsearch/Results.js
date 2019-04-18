@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { msearch } from "./utils";
+import { msearch, resultsQuery } from "./utils";
 import { getStateContext } from "./StateContextProvider";
 
 export default function() {
-  const [{ query }] = getStateContext();
+  const [{ queries }] = getStateContext();
   const [data, setData] = useState([]);
+  const query = resultsQuery(queries);
 
   useEffect(() => {
     async function fetchData() {

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { msearch, aggsFromFields } from "./utils";
+import { msearch, aggsFromFields, toTermQueries } from "./utils";
+import { getStateContext } from "./StateContextProvider";
 
-export default function({ fields }) {
+export default function({ fields, id }) {
+  const [{ queries }, dispatch] = getStateContext();
   const [data, setData] = useState([]);
   const [filterValue, setFilterValue] = useState("");
   const [size, setSize] = useState(5);
+  const [selectedInputs, setSelectedInputs] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,16 +27,33 @@ export default function({ fields }) {
           setFilterValue(e.target.value);
         }}
       />
-      <ul>
-        {data.map(e => (
-          <li key={e.key}>
-            {e.key} ({e.doc_count})
-          </li>
-        ))}
-      </ul>
+      {data.map(item => (
+        <label key={item.key}>
+          <br />
+          <input
+            type="checkbox"
+            checked={selectedInputs.includes(item.key)}
+            onChange={e => {
+              const newSelectedInputs = e.target.checked
+                ? [...new Set([...selectedInputs, item.key])]
+                : selectedInputs.filter(f => f.key === item.key);
+              setSelectedInputs(newSelectedInputs);
+              dispatch({
+                type: "updateQueries",
+                key: id,
+                value: {
+                  bool: { should: toTermQueries(fields, newSelectedInputs) }
+                }
+              });
+            }}
+          />
+          {item.key} ({item.doc_count})
+        </label>
+      ))}
       {data.length === size ? (
         <button onClick={() => setSize(size + 5)}>Voir plus</button>
       ) : null}
+      <div>Internal query: {JSON.stringify(queries.get(id))}</div>
     </div>
   );
 }

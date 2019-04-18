@@ -3,16 +3,15 @@ import { StateContextProvider } from "./StateContextProvider";
 
 export default function(props) {
   const initialState = {
-    query: { bool: { must: [{ match_all: {} }] } }
+    queries: new Map()
   };
 
   const reducer = (state, action) => {
     switch (action.type) {
-      case "updateQuery":
-        return {
-          ...state,
-          query: { bool: { must: [action.query] } }
-        };
+      case "updateQueries":
+        const { queries } = state;
+        queries.set(action.key, action.value);
+        return { ...state, queries };
       default:
         return state;
     }
