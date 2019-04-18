@@ -12,11 +12,7 @@ export default function() {
             }
             return {
               query: {
-                multi_match: {
-                  query: value,
-                  type: "phrase",
-                  fields: ["TICO", "TITRE", "TITR", "LEG"]
-                }
+                multi_match: { query: value, type: "phrase", fields: ["TICO"] }
               }
             };
           }}
