@@ -3,13 +3,9 @@ import { Elasticsearch, Results, SearchBox, Facet } from "./elasticsearch";
 
 function customQuery(value) {
   if (!value) {
-    return { query: { match_all: {} } };
+    return { match_all: {} };
   }
-  return {
-    query: {
-      multi_match: { query: value, type: "phrase", fields: ["TICO"] }
-    }
-  };
+  return { multi_match: { query: value, type: "phrase", fields: ["TICO"] } };
 }
 
 export default function() {
@@ -17,7 +13,7 @@ export default function() {
     <div>
       <Elasticsearch>
         <SearchBox customQuery={customQuery} />
-        <Facet fields={["AUTR.keyword"]} />
+        <Facet id="author" fields={["AUTR.keyword"]} />
         <Results />
       </Elasticsearch>
     </div>

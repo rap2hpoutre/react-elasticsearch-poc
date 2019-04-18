@@ -31,7 +31,9 @@ export default function({ fields }) {
           </li>
         ))}
       </ul>
-      {data.length === size ? <button onClick={() => setSize(size + 5)}>Voir plus</button> : null}
+      {data.length === size ? (
+        <button onClick={() => setSize(size + 5)}>Voir plus</button>
+      ) : null}
     </div>
   );
 }

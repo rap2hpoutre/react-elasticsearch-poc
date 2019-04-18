@@ -3,7 +3,7 @@ import { StateContextProvider } from "./StateContextProvider";
 
 export default function(props) {
   const initialState = {
-    query: {}
+    query: { bool: { must: [{ match_all: {} }] } }
   };
 
   const reducer = (state, action) => {
@@ -11,9 +11,8 @@ export default function(props) {
       case "updateQuery":
         return {
           ...state,
-          query: action.query
+          query: { bool: { must: [action.query] } }
         };
-
       default:
         return state;
     }

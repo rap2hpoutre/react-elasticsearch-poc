@@ -8,7 +8,7 @@ export default function() {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await msearch(query);
+      const result = await msearch({ query, size: 10 });
       setData(result.responses[0].hits.hits);
     }
     fetchData();

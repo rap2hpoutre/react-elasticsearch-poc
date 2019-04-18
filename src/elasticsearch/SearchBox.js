@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { getStateContext } from "./StateContextProvider";
 
-const limit = { from: 0, size: 10 };
-
 export default function({ customQuery }) {
   const [{ query }, dispatch] = getStateContext();
   const [value, setValue] = useState();
@@ -16,7 +14,7 @@ export default function({ customQuery }) {
           setValue(e.target.value);
           dispatch({
             type: "updateQuery",
-            query: { ...customQuery(e.target.value), ...limit }
+            query: { ...customQuery(e.target.value) }
           });
         }}
       />
