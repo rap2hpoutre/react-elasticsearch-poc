@@ -18,3 +18,20 @@ export function msearch(query) {
     resolve(response);
   });
 }
+
+export function aggsFromFields(fields, size, filterValue) {
+  function aggFromField(field, filterValue) {
+    const t = { field, order: { _count: "desc" }, size };
+    if (filterValue) {
+      t.include = `.*${filterValue}.*`;
+    }
+    return {
+      [field]: { terms: t }
+    };
+  }
+  let result = {};
+  fields.forEach(f => {
+    result = { ...result, ...aggFromField(f, filterValue) };
+  });
+  return { query: { match_all: {} }, size: 0, aggs: result };
+}
